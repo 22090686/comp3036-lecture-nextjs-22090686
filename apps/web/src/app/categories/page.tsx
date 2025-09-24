@@ -13,7 +13,7 @@ export default function Page() {
             <ul>
                 {postCategories.map((category) => (
                     <li key={category.name}>
-                        <Link href={`/categories/${toUrlPath(category.name)}`}>{category.name}</Link>
+                        <Link href={`/category/${toUrlPath(category.name)}`}>{category.name}</Link>
                     </li>
                 ))}
             </ul>

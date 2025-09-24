@@ -1,3 +1,30 @@
-.main {
-  color: red;
+.postList {
+  list-style: none;
+  padding: 0;
+}
+
+.postItem {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  border-radius: 8px;
+}
+
+.postImage {
+  border-radius: 6px;
+}
+
+.postTitle {
+  margin: 0;
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: #444;
 }
