@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
-import { isLoggedIn } from "../../../utils/auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  const loggedIn = await isLoggedIn();
+export async function GET(req: NextRequest) {
+  const authToken = req.cookies.get("auth_token")?.value;
+  const loggedIn = authToken === "loggedin";
+
   return NextResponse.json({ loggedIn });
 }

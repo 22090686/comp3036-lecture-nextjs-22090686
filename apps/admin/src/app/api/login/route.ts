@@ -1,20 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { password } = await req.json();
+const PASSWORD = "123"; // hard-coded password
 
-  // hard-coded password check
-  if (password !== "123") {
-    return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { password } = body;
+
+  if (password === PASSWORD) {
+    const res = NextResponse.json({ success: true });
+    // Set httpOnly cookie
+    res.cookies.set({
+      name: "auth_token",
+      value: "loggedin",
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24, // 1 day
+    });
+    return res;
+  } else {
+    return NextResponse.json({ success: false, message: "Invalid password" }, { status: 401 });
   }
-
-  // if password matches, set httpOnly cookie "auth_token"
-  const res = NextResponse.json({ success: true });
-  res.cookies.set("auth_token", "valid", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-  });
-  return res;
 }

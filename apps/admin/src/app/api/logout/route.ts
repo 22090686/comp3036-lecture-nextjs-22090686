@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
   const res = NextResponse.json({ success: true });
-  // clear cookie
-  res.cookies.set("auth_token", "", {
-    httpOnly: true,
-    expires: new Date(0),
+  // Remove the cookie
+  res.cookies.set({
+    name: "auth_token",
+    value: "",
     path: "/",
+    maxAge: 0,
   });
   return res;
 }
