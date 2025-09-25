@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+import { ViewPost } from "./Post"; // adjust path if needed
 
 export default function PostDetail() {
   const params = useParams();
-  const urlId = params.id;
+  const urlId = params.urlid; // use correct param key
 
   const [post, setPost] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,6 @@ export default function PostDetail() {
   useEffect(() => {
     async function fetchPost() {
       try {
-        // Fetch all posts
         const res = await fetch("/api/posts");
         if (!res.ok) throw new Error("Failed to fetch posts");
         const data = await res.json();
@@ -28,7 +29,7 @@ export default function PostDetail() {
         setPost(found);
         setLoading(false);
 
-        // Increment views
+        // Increment views in backend
         await fetch("/api/posts/views", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -48,16 +49,17 @@ export default function PostDetail() {
 
   return (
     <main className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-      <p className="text-gray-600 mb-2">
-        Category: {post.category} • Tags: {post.tags} • Views: {post.views} • Likes: {post.likes}
-      </p>
-      {post.imageUrl && (
-        <img src={post.imageUrl} alt={post.title} className="mb-4 w-full max-h-96 object-cover" />
-      )}
-      <div>
-        <pre>{post.content}</pre>
+      {/* Home Button */}
+      <div className="mb-4">
+        <Link
+          href="/"
+          className="px-3 py-1 bg-gray-300 text-black rounded hover:bg-gray-400"
+        >
+          Home
+        </Link>
       </div>
+
+      <ViewPost post={post} />
     </main>
   );
 }

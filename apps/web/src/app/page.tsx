@@ -5,6 +5,7 @@ import Link from "next/link";
 
 type Post = {
   id: number;
+  urlId: string; // slugified title
   title: string;
   description: string;
   date: string;
@@ -13,7 +14,7 @@ type Post = {
   views: number;
   likes: number;
   imageUrl: string;
-  active: boolean; // include active field
+  active: boolean;
 };
 
 export default function Home() {
@@ -39,7 +40,7 @@ export default function Home() {
       <ul className="space-y-4">
         {posts.map((post) => (
           <li key={post.id} className="border p-4 rounded">
-            <Link href={`/posts/${post.id}`}>
+            <Link href={`/post/${post.urlId}`}>
               <h2 className="text-xl font-bold text-blue-600 hover:underline">
                 {post.title}
               </h2>
