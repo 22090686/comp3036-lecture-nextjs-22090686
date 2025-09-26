@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PostList from "./PostList";
 import LogoutButton from "./LogoutButton";
-import SearchPosts from "./SearchPosts"; // 👈 new client component
+import SearchPosts from "./searchposts"; 
 
 type Post = {
   id: number;
@@ -53,7 +53,7 @@ export default async function AdminHome() {
         </button>
       </Link>
 
-      {/* 🔍 Search system */}
+      {/*Search system */}
       <SearchPosts posts={posts} />
     </main>
   );
