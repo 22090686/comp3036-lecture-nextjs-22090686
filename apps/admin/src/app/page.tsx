@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PostList from "./PostList";
 import LogoutButton from "./LogoutButton";
+import SearchPosts from "./SearchPosts"; // 👈 new client component
 
 type Post = {
   id: number;
@@ -25,7 +26,7 @@ async function getPosts(): Promise<Post[]> {
 
 export default async function AdminHome() {
   // 🔑 Check for auth token
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("auth_token");
 
   if (!token) {
@@ -52,7 +53,8 @@ export default async function AdminHome() {
         </button>
       </Link>
 
-      <PostList posts={posts} />
+      {/* 🔍 Search system */}
+      <SearchPosts posts={posts} />
     </main>
   );
 }

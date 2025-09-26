@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 
 type Post = {
@@ -16,9 +15,15 @@ type Post = {
   active: boolean;
 };
 
-export default function PostList({ posts: initialPosts }: { posts: Post[] }) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
-
+export default function PostList({
+  posts,
+  onUpdate,
+  onDelete,
+}: {
+  posts: Post[];
+  onUpdate?: (post: Post) => void;
+  onDelete?: (id: number) => void;
+}) {
   async function toggleActive(post: Post) {
     try {
       const res = await fetch("/api/posts", {
@@ -28,24 +33,22 @@ export default function PostList({ posts: initialPosts }: { posts: Post[] }) {
       });
       if (!res.ok) throw new Error("Failed to update post");
       const updated = await res.json();
-      setPosts(posts.map((p) => (p.id === updated.id ? updated : p)));
+      onUpdate?.(updated); // let parent update state
     } catch (err) {
       alert("Failed to toggle active state");
     }
   }
 
   async function deletePost(post: Post) {
-  if (!confirm("Are you sure you want to delete this post?")) return;
-  try {
-    const res = await fetch(`/api/posts/${post.id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error("Failed to delete post");
-    // Remove post from UI
-    setPosts((prev) => prev.filter((p) => p.id !== post.id));
-  } catch (err) {
-    alert("Failed to delete post");
+    if (!confirm("Are you sure you want to delete this post?")) return;
+    try {
+      const res = await fetch(`/api/posts/${post.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete post");
+      onDelete?.(post.id); // let parent update state
+    } catch (err) {
+      alert("Failed to delete post");
+    }
   }
-}
-
 
   if (posts.length === 0) {
     return <p className="text-gray-500">No posts available.</p>;
